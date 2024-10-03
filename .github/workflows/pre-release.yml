@@ -35,9 +35,9 @@ jobs:
           rm -rf target/classes target/maven-archiver target/maven-status
           rm target/original-*.jar
       - uses: actions/upload-artifact@v4
-        name: Upload Beta artifact
+        name: Upload Insider artifact
         with:
-          name: Slimefun Beta Build
+          name: Slimefun Insider Build
           path: target
       - name: Automatic Releases
         uses: marvinpinto/action-automatic-releases@v1.2.1

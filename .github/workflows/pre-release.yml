@@ -28,8 +28,6 @@ jobs:
         run: mvn clean
       - name: Build Slimefun
         run: mvn -s .mvn/settings.xml -B package --errors
-      - name: Maven Dependency Tree Dependency Submission
-        uses: advanced-security/maven-dependency-submission-action@v4.1.0
       - name: Delete useless files
         run: |
           rm -rf target/classes target/maven-archiver target/maven-status

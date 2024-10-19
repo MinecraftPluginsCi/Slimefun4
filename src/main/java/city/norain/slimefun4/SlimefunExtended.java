@@ -2,6 +2,7 @@ package city.norain.slimefun4;
 
 import city.norain.slimefun4.compatibillty.VersionedEvent;
 import city.norain.slimefun4.listener.SlimefunMigrateListener;
+import city.norain.slimefun4.utils.EnvUtil;
 import io.github.bakedlibs.dough.versions.MinecraftVersion;
 import io.github.bakedlibs.dough.versions.UnknownServerVersionException;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -62,6 +63,8 @@ public final class SlimefunExtended {
 
     public static void init(@Nonnull Slimefun sf) {
         EnvironmentChecker.scheduleSlimeGlueCheck(sf);
+
+        EnvUtil.init(sf);
 
         checkDebug();
 

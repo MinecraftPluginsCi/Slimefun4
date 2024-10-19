@@ -1,5 +1,5 @@
 version: "1"
 rules:
   - base: dev
-    upstream: SlimefunGuguProject:master
+    upstream: SlimefunGuguProject:dev
     mergeMethod: merge

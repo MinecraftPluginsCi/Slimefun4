@@ -68,7 +68,7 @@ class VersionsCommand extends SubCommand {
                     .color(ChatColor.GREEN)
                     .append(Slimefun.getVersion()
                             + (Slimefun.getVersion().toLowerCase(Locale.ROOT).contains("release")
-                                    ? " (" + EnvUtil.getBuildCommitID() + ")"
+                                    ? " (" + EnvUtil.getBuildCommitID() + "@" + EnvUtil.getBranch() + ")"
                                     : "")
                             + '\n')
                     .color(ChatColor.DARK_GREEN)

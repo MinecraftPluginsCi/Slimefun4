@@ -28,9 +28,9 @@ import org.bukkit.persistence.PersistentDataType;
 public final class ChargeUtils {
 
     private static final String LORE_PREFIX = ChatColors.color("&8\u21E8 &e\u26A1 &7");
-    private static final String NUMBER_PREFIX = "([+-]?[\\d]+([\\.][\\d]+)?([Ee][+-]?[\\d]+)?)";
+    private static final String NUMBER_REGEX = "([+-]?[\\d]+([\\.][\\d]+)?([Ee][+-]?[\\d]+)?)";
     private static final Pattern REGEX =
-            Pattern.compile(ChatColors.color("(&c&o)?" + LORE_PREFIX) + NUMBER_PREFIX + " / " + NUMBER_PREFIX + " J");
+            Pattern.compile(ChatColors.color("(&c&o)?" + LORE_PREFIX) + NUMBER_REGEX + " / " + NUMBER_REGEX + " J");
 
     private ChargeUtils() {}
 

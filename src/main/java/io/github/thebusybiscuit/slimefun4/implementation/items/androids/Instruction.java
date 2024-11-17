@@ -1,5 +1,6 @@
 package io.github.thebusybiscuit.slimefun4.implementation.items.androids;
 
+import city.norain.slimefun4.api.menu.UniversalMenu;
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import java.util.HashMap;
@@ -8,7 +9,6 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -277,7 +277,7 @@ public enum Instruction {
     }
 
     @ParametersAreNonnullByDefault
-    public void execute(ProgrammableAndroid android, Block b, BlockMenu inventory, BlockFace face) {
+    public void execute(ProgrammableAndroid android, Block b, UniversalMenu inventory, BlockFace face) {
         Validate.notNull(method, "Instruction '" + name() + "' must be executed manually!");
         method.perform(android, b, inventory, face);
     }

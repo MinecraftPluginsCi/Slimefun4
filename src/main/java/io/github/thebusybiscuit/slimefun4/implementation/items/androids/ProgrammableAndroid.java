@@ -2,6 +2,7 @@ package io.github.thebusybiscuit.slimefun4.implementation.items.androids;
 
 import city.norain.slimefun4.api.menu.UniversalMenu;
 import city.norain.slimefun4.api.menu.UniversalMenuPreset;
+import city.norain.slimefun4.utils.TaskUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunUniversalBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunUniversalData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.attributes.UniversalBlock;
@@ -989,7 +990,8 @@ public class ProgrammableAndroid extends SlimefunItem
     public void addItems(Block b, ItemStack... items) {
         Validate.notNull(b, "The Block cannot be null.");
 
-        Optional<UUID> uuid = Slimefun.getBlockDataService().getUniversalDataUUID(b);
+        Optional<UUID> uuid =
+                TaskUtil.runSyncMethod(() -> Slimefun.getBlockDataService().getUniversalDataUUID(b));
 
         if (uuid.isEmpty()) {
             throw new IllegalStateException("Android missing uuid");

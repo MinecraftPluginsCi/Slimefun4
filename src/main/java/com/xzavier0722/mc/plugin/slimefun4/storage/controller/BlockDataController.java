@@ -323,6 +323,10 @@ public class BlockDataController extends ADataController {
                             Slimefun.getBlockDataService()
                                     .getUniversalDataUUID(l.getBlock())
                                     .ifPresent(uuid -> removeUniversalBlockData(uuid, l));
+                        } else {
+                            Slimefun.runSync(() -> Slimefun.getBlockDataService()
+                                    .getUniversalDataUUID(l.getBlock())
+                                    .ifPresent(uuid -> removeUniversalBlockData(uuid, l)));
                         }
                     });
 

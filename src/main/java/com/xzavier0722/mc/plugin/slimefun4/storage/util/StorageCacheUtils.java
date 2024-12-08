@@ -1,6 +1,7 @@
 package com.xzavier0722.mc.plugin.slimefun4.storage.util;
 
 import city.norain.slimefun4.api.menu.UniversalMenu;
+import city.norain.slimefun4.utils.TaskUtil;
 import com.google.common.base.Preconditions;
 import com.xzavier0722.mc.plugin.slimefun4.storage.callback.IAsyncReadCallback;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.ADataContainer;
@@ -37,7 +38,9 @@ public class StorageCacheUtils {
 
     @ParametersAreNonnullByDefault
     public static boolean hasUniversalBlock(Location l) {
-        return Slimefun.getBlockDataService().getUniversalDataUUID(l.getBlock()).isPresent();
+        return TaskUtil.runSyncMethod(() -> Slimefun.getBlockDataService()
+                .getUniversalDataUUID(l.getBlock())
+                .isPresent());
     }
 
     @ParametersAreNonnullByDefault
@@ -162,9 +165,11 @@ public class StorageCacheUtils {
      */
     @ParametersAreNonnullByDefault
     @Nullable public static SlimefunUniversalBlockData getUniversalBlock(Block block) {
-        var uuid = Slimefun.getBlockDataService().getUniversalDataUUID(block);
+        return TaskUtil.runSyncMethod(() -> {
+            var uuid = Slimefun.getBlockDataService().getUniversalDataUUID(block);
 
-        return uuid.map(id -> getUniversalBlock(id, block.getLocation())).orElse(null);
+            return uuid.map(id -> getUniversalBlock(id, block.getLocation())).orElse(null);
+        });
     }
 
     /**

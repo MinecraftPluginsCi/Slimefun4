@@ -525,9 +525,11 @@ public class BlockDataController extends ADataController {
 
         var cache = loadedUniversalData.get(uuid);
 
-        return cache == null
-                ? getUniversalBlockData(uuid)
-                : (cache instanceof SlimefunUniversalBlockData ubd ? ubd : null);
+        if (cache instanceof SlimefunUniversalBlockData ubd) {
+            return ubd;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -540,7 +542,8 @@ public class BlockDataController extends ADataController {
 
         return loadedUniversalData.values().stream()
                 .filter(uniData -> uniData instanceof SlimefunUniversalBlockData ubd
-                        && ubd.getLastPresent().toLocation().equals(l))
+                        && ubd.getLastPresent() != null
+                        && l.equals(ubd.getLastPresent().toLocation()))
                 .map(data -> (SlimefunUniversalBlockData) data)
                 .findFirst();
     }

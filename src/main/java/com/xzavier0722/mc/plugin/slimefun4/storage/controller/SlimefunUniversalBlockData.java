@@ -3,7 +3,9 @@ package com.xzavier0722.mc.plugin.slimefun4.storage.controller;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.attributes.UniversalDataTrait;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.LocationUtils;
 import io.github.bakedlibs.dough.blocks.BlockPosition;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.UUID;
+import java.util.logging.Level;
 import org.bukkit.Location;
 
 public class SlimefunUniversalBlockData extends SlimefunUniversalData {
@@ -36,7 +38,8 @@ public class SlimefunUniversalBlockData extends SlimefunUniversalData {
         var data = getData("location");
 
         if (data == null) {
-            throw new IllegalArgumentException("UniversalBlockData missing location data");
+            Slimefun.logger().log(Level.WARNING, "UniversalBlockData [" + getUUID() + "] missing location data");
+            return null;
         }
 
         lastPresent = new BlockPosition(LocationUtils.toLocation(data));

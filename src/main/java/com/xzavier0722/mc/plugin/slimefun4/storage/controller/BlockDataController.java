@@ -222,33 +222,27 @@ public class BlockDataController extends ADataController {
      *
      * @param l    Slimefun 方块位置 {@link Location}
      * @param sfId Slimefun 物品 ID {@link SlimefunItem#getId()}
-     * @return 方块数据, 由于 {@link SlimefunItem} 的不同会返回两种数据中的一种
-     * {@link SlimefunBlockData}
-     * {@link SlimefunUniversalData}
+     * @return 方块数据, {@link SlimefunBlockData}
      */
     @Nonnull
-    public ASlimefunDataContainer createBlock(Location l, String sfId) {
+    public SlimefunBlockData createBlock(Location l, String sfId) {
         checkDestroy();
         var sfItem = SlimefunItem.getById(sfId);
 
         if (sfItem instanceof UniversalBlock) {
-            var re = createUniversalBlockData(l, sfId);
-            if (Slimefun.getRegistry().getTickerBlocks().contains(sfId)) {
-                Slimefun.getTickerTask().enableTicker(l, re.getUUID());
-            }
-            return re;
-        } else {
-            var re = getChunkDataCache(l.getChunk(), true).createBlockData(l, sfId);
-            if (Slimefun.getRegistry().getTickerBlocks().contains(sfId)) {
-                Slimefun.getTickerTask().enableTicker(l);
-            }
-            return re;
+            throw new IllegalArgumentException("Cannot create normal block data on UniversalBlock!");
         }
+
+        var re = getChunkDataCache(l.getChunk(), true).createBlockData(l, sfId);
+        if (Slimefun.getRegistry().getTickerBlocks().contains(sfId)) {
+            Slimefun.getTickerTask().enableTicker(l);
+        }
+        return re;
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunUniversalBlockData createUniversalBlockData(Location l, String sfId) {
+    public SlimefunUniversalBlockData createUniversalBlock(Location l, String sfId) {
         checkDestroy();
 
         var uuid = UUID.randomUUID();
@@ -1310,7 +1304,7 @@ public class BlockDataController extends ADataController {
                 return;
             }
 
-            var universalData = createUniversalBlockData(l, sfId);
+            var universalData = createUniversalBlock(l, sfId);
 
             Slimefun.runSync(
                     () -> Slimefun.getBlockDataService()

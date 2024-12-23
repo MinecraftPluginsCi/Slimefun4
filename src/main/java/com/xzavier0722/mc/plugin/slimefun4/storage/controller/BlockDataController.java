@@ -1307,8 +1307,13 @@ public class BlockDataController extends ADataController {
             var universalData = createUniversalBlock(l, sfId);
 
             Slimefun.runSync(
-                    () -> Slimefun.getBlockDataService()
-                            .updateUniversalDataUUID(l.getBlock(), String.valueOf(universalData.getUUID())),
+                    () -> {
+                        if (Slimefun.getBlockDataService()
+                                .isTileEntity(l.getBlock().getType())) {
+                            Slimefun.getBlockDataService()
+                                    .updateUniversalDataUUID(l.getBlock(), String.valueOf(universalData.getUUID()));
+                        }
+                    },
                     10L);
 
             kvData.forEach(recordSet -> universalData.setData(

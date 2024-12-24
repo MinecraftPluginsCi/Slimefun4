@@ -250,6 +250,8 @@ public class BlockDataController extends ADataController {
 
         uniData.setIsDataLoaded(true);
 
+        uniData.initLastPresent();
+
         loadedUniversalData.put(uuid, uniData);
 
         var preset = UniversalMenuPreset.getPreset(sfId);

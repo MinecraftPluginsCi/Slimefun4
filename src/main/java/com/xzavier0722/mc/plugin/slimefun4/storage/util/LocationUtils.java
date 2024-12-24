@@ -1,6 +1,10 @@
 package com.xzavier0722.mc.plugin.slimefun4.storage.util;
 
 import city.norain.slimefun4.SlimefunExtended;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+
+import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -20,13 +24,17 @@ public class LocationUtils {
             return null;
         }
 
-        var strArr = lKey.split(";");
-        var loc = strArr[1].split(":");
-        return new Location(
+        try {
+            var strArr = lKey.split(";");
+            var loc = strArr[1].split(":");
+            return new Location(
                 Bukkit.getWorld(strArr[0]),
                 Double.parseDouble(loc[0]),
                 Double.parseDouble(loc[1]),
                 Double.parseDouble(loc[2]));
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to parse location [" + lKey + "]", e);
+        }
     }
 
     public static boolean isSameChunk(Chunk c1, Chunk c2) {

@@ -1,5 +1,6 @@
 package com.xzavier0722.mc.plugin.slimefun4.storage.util;
 
+import city.norain.slimefun4.utils.StringUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.StorageType;
 import io.github.thebusybiscuit.slimefun4.core.debug.Debug;
 import io.github.thebusybiscuit.slimefun4.core.debug.TestCase;
@@ -25,8 +26,9 @@ public class DataUtils {
             var itemStr = Base64Coder.encodeLines(stream.toByteArray());
 
             if (Slimefun.getDatabaseManager().getBlockDataStorageType() != StorageType.SQLITE
-                    && itemStr.length() > 65535) {
-                throw new IllegalArgumentException("ItemStack too large");
+                    && itemStr.length() > 65533) {
+                throw new IllegalArgumentException("检测到过大物品, 请联系物品对应插件开发者解决: " + StringUtil.itemStackToString(itemStack)
+                        + ", size = " + itemStr.length());
             }
 
             return itemStr;

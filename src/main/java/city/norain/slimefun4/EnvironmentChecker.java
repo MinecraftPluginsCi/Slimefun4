@@ -41,23 +41,28 @@ class EnvironmentChecker {
         try {
             Class.forName("cpw.mods.modlauncher.Launcher", false, ClassLoader.getSystemClassLoader());
             return true;
-        } catch (ClassNotFoundException ignored) {}
+        } catch (ClassNotFoundException ignored) {
+        }
 
         try {
-            Class.forName("net.minecraftforge.server.console.TerminalHandler", false, ClassLoader.getSystemClassLoader());
+            Class.forName(
+                    "net.minecraftforge.server.console.TerminalHandler", false, ClassLoader.getSystemClassLoader());
 
             return true;
-        } catch (ClassNotFoundException ignored) {}
+        } catch (ClassNotFoundException ignored) {
+        }
 
         try {
             Class.forName("org.cardboardpowered.mixin.CardboardMixinPlugin", false, ClassLoader.getSystemClassLoader());
             return true;
-        } catch (ClassNotFoundException ignored) {}
+        } catch (ClassNotFoundException ignored) {
+        }
 
         try {
             Class.forName("net.fabricmc.loader.impl.FabricLoaderImpl", false, ClassLoader.getSystemClassLoader());
             return true;
-        } catch (ClassNotFoundException ignored) {}
+        } catch (ClassNotFoundException ignored) {
+        }
 
         if (Bukkit.getPluginCommand("mohist") != null) {
             return true;

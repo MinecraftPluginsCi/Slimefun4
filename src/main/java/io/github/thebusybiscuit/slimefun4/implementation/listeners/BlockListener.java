@@ -20,7 +20,6 @@ import io.github.thebusybiscuit.slimefun4.core.handlers.ToolUseHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.utils.compatibility.VersionedEnchantment;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,7 +27,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -60,7 +58,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class BlockListener implements Listener {
 
-    private static final BlockFace[] CARDINAL_BLOCKFACES = new BlockFace[]{
+    private static final BlockFace[] CARDINAL_BLOCKFACES = new BlockFace[] {
         BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.DOWN, BlockFace.UP
     };
 
@@ -121,6 +119,15 @@ public class BlockListener implements Listener {
         }
 
         if (sfItem != null && !(sfItem instanceof NotPlaceable)) {
+            /*
+             如果这个物品是工具类物品，我们需要检查它是否修改了一个方块 (铲子右键、打火石点火)
+             并不要为替换的方块创建一个对应工具 ID 的数据
+             这应该适用于大部分情况，但建议附属开发者们还是显式声明对应物品是不可放置的最好
+            */
+            if (!e.getBlockReplacedState().getType().isAir()) {
+                return;
+            }
+
             if (!sfItem.canUse(e.getPlayer(), true)) {
                 e.setCancelled(true);
             } else {
@@ -140,16 +147,16 @@ public class BlockListener implements Listener {
 
                     if (sfItem instanceof UniversalBlock) {
                         var data = Slimefun.getDatabaseManager()
-                            .getBlockDataController()
-                            .createUniversalBlock(block.getLocation(), sfItem.getId());
+                                .getBlockDataController()
+                                .createUniversalBlock(block.getLocation(), sfItem.getId());
 
                         if (Slimefun.getBlockDataService().isTileEntity(block.getType())) {
                             Slimefun.getBlockDataService().updateUniversalDataUUID(block, data.getKey());
                         }
                     } else {
                         Slimefun.getDatabaseManager()
-                            .getBlockDataController()
-                            .createBlock(block.getLocation(), sfItem.getId());
+                                .getBlockDataController()
+                                .createBlock(block.getLocation(), sfItem.getId());
                     }
 
                     sfItem.callItemHandler(BlockPlaceHandler.class, handler -> handler.onPlayerPlace(e));
@@ -173,15 +180,15 @@ public class BlockListener implements Listener {
         var heldItem = e.getPlayer().getInventory().getItemInMainHand();
         var block = e.getBlock();
         var blockData = StorageCacheUtils.hasBlock(block.getLocation())
-            ? StorageCacheUtils.getBlock(block.getLocation())
-            : StorageCacheUtils.getUniversalBlock(block);
+                ? StorageCacheUtils.getBlock(block.getLocation())
+                : StorageCacheUtils.getUniversalBlock(block);
         var sfItem = blockData == null ? null : SlimefunItem.getById(blockData.getSfId());
 
         // If there is a Slimefun Block here, call our BreakEvent and, if cancelled, cancel this event
         // and return
         if (blockData != null) {
             SlimefunBlockBreakEvent breakEvent =
-                new SlimefunBlockBreakEvent(e.getPlayer(), heldItem, e.getBlock(), sfItem);
+                    new SlimefunBlockBreakEvent(e.getPlayer(), heldItem, e.getBlock(), sfItem);
             Bukkit.getPluginManager().callEvent(breakEvent);
 
             if (breakEvent.isCancelled()) {
@@ -213,18 +220,18 @@ public class BlockListener implements Listener {
                 e.setDropItems(false);
                 var type = block.getType();
                 StorageCacheUtils.executeAfterLoad(
-                    blockData,
-                    () -> {
-                        callBlockHandler(e, heldItem, drops);
-                        if (e.isCancelled()) {
-                            block.setType(type);
-                            blockData.setPendingRemove(false);
-                            return;
-                        }
-                        e.setDropItems(true);
-                        dropItems(e, heldItem, block, sfItem, drops);
-                    },
-                    true);
+                        blockData,
+                        () -> {
+                            callBlockHandler(e, heldItem, drops);
+                            if (e.isCancelled()) {
+                                block.setType(type);
+                                blockData.setPendingRemove(false);
+                                return;
+                            }
+                            e.setDropItems(true);
+                            dropItems(e, heldItem, block, sfItem, drops);
+                        },
+                        true);
                 return;
             }
 
@@ -271,7 +278,7 @@ public class BlockListener implements Listener {
 
     @ParametersAreNonnullByDefault
     private void dropItems(
-        BlockBreakEvent e, ItemStack item, Block block, @Nullable SlimefunItem sfBlock, List<ItemStack> drops) {
+            BlockBreakEvent e, ItemStack item, Block block, @Nullable SlimefunItem sfBlock, List<ItemStack> drops) {
         if (!drops.isEmpty()) {
             // TODO: properly support loading inventories within unit tests
             if (!Slimefun.instance().isUnitTest()) {
@@ -289,7 +296,7 @@ public class BlockListener implements Listener {
                     // Prevent null or air from being dropped
                     if (drop != null && drop.getType() != Material.AIR) {
                         if (e.getPlayer().getGameMode() != GameMode.CREATIVE
-                            || Slimefun.getCfg().getBoolean("options.drop-block-creative")) {
+                                || Slimefun.getCfg().getBoolean("options.drop-block-creative")) {
                             block.getWorld().dropItemNaturally(block.getLocation(), drop);
                         }
                     }
@@ -327,7 +334,7 @@ public class BlockListener implements Listener {
                 var controller = Slimefun.getDatabaseManager().getBlockDataController();
                 if (blockData.isDataLoaded()) {
                     sfItem.callItemHandler(
-                        BlockBreakHandler.class, handler -> handler.onPlayerBreak(dummyEvent, item, drops));
+                            BlockBreakHandler.class, handler -> handler.onPlayerBreak(dummyEvent, item, drops));
                     controller.removeBlock(loc);
                     dropItems(dummyEvent, item, block, sfItem, drops);
                 } else {
@@ -341,7 +348,7 @@ public class BlockListener implements Listener {
                         @Override
                         public void onResult(SlimefunBlockData result) {
                             sfItem.callItemHandler(
-                                BlockBreakHandler.class, handler -> handler.onPlayerBreak(dummyEvent, item, drops));
+                                    BlockBreakHandler.class, handler -> handler.onPlayerBreak(dummyEvent, item, drops));
                             controller.removeBlock(loc);
                             dropItems(dummyEvent, item, block, sfItem, drops);
                         }
@@ -430,7 +437,7 @@ public class BlockListener implements Listener {
     // 美化可旋转类 (如头颅) 物品放置
     private void optimizePlacement(SlimefunItem sfItem, Block block, Location l) {
         if (block.getBlockData() instanceof Rotatable rotatable
-            && !(rotatable.getRotation() == BlockFace.UP || rotatable.getRotation() == BlockFace.DOWN)) {
+                && !(rotatable.getRotation() == BlockFace.UP || rotatable.getRotation() == BlockFace.DOWN)) {
             BlockFace rotation = null;
 
             if (sfItem instanceof NotCardinallyRotatable && sfItem instanceof NotDiagonallyRotatable) {
@@ -438,11 +445,9 @@ public class BlockListener implements Listener {
             } else if (sfItem instanceof NotRotatable notRotatable) {
                 rotation = notRotatable.getRotation();
             } else if (sfItem instanceof NotCardinallyRotatable notRotatable) {
-                rotation = notRotatable.getRotation(Location.normalizeYaw(
-                    l.getYaw()));
+                rotation = notRotatable.getRotation(Location.normalizeYaw(l.getYaw()));
             } else if (sfItem instanceof NotDiagonallyRotatable notRotatable) {
-                rotation = notRotatable.getRotation(Location.normalizeYaw(
-                    l.getYaw()));
+                rotation = notRotatable.getRotation(Location.normalizeYaw(l.getYaw()));
             }
 
             if (rotation != null) {

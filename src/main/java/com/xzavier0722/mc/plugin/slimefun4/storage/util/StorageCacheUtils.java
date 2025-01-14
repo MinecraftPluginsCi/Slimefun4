@@ -31,6 +31,11 @@ public class StorageCacheUtils {
     private static final Set<ADataContainer> loadingData = new HashSet<>();
 
     @ParametersAreNonnullByDefault
+    public static boolean hasSlimefunBlock(Location l) {
+        return hasBlock(l) || hasUniversalBlock(l);
+    }
+
+    @ParametersAreNonnullByDefault
     public static boolean hasBlock(Location l) {
         return getBlock(l) != null;
     }

@@ -95,7 +95,7 @@ public class BlockListener implements Listener {
                     e.setCancelled(true);
                 }
             }
-        } else if (StorageCacheUtils.hasBlock(loc)) {
+        } else if (StorageCacheUtils.hasSlimefunBlock(loc)) {
             // If there is no air (e.g. grass) then don't let the block be placed
             e.setCancelled(true);
         }
@@ -175,7 +175,7 @@ public class BlockListener implements Listener {
 
         var heldItem = e.getPlayer().getInventory().getItemInMainHand();
         var block = e.getBlock();
-        var blockData = StorageCacheUtils.hasBlock(block.getLocation())
+        var blockData = StorageCacheUtils.getBlock(block.getLocation()) != null
                 ? StorageCacheUtils.getBlock(block.getLocation())
                 : StorageCacheUtils.getUniversalBlock(block);
         var sfItem = blockData == null ? null : SlimefunItem.getById(blockData.getSfId());

@@ -1033,8 +1033,10 @@ public class ProgrammableAndroid extends SlimefunItem
             Slimefun.getTickerTask().disableTicker(from.getLocation());
 
             // Bro encountered a ghost 💀
-            if (StorageCacheUtils.hasBlock(to.getLocation())) {
-                var data = StorageCacheUtils.getBlock(to.getLocation());
+            if (StorageCacheUtils.hasSlimefunBlock(to.getLocation())) {
+                var data = StorageCacheUtils.getBlock(to.getLocation()) == null
+                        ? StorageCacheUtils.getBlock(to.getLocation())
+                        : StorageCacheUtils.getUniversalBlock(to);
                 if (data != null && !data.isPendingRemove()) {
                     // Since it's a ghost, we just hunt it.
                     Slimefun.getDatabaseManager().getBlockDataController().removeBlock(to.getLocation());

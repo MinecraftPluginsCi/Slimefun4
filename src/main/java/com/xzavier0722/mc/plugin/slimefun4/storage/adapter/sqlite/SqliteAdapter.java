@@ -14,6 +14,7 @@ import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlC
 import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlConstants.FIELD_PLAYER_UUID;
 import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlConstants.FIELD_RESEARCH_KEY;
 import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlConstants.FIELD_SLIMEFUN_ID;
+import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlConstants.FIELD_TABLE_VERSION;
 import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlConstants.FIELD_UNIVERSAL_TRAITS;
 import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlConstants.FIELD_UNIVERSAL_UUID;
 
@@ -35,6 +36,8 @@ public class SqliteAdapter extends SqlCommonAdapter<SqliteConfig> {
             case PLAYER_PROFILE -> createProfileTables();
             case BLOCK_STORAGE -> createBlockStorageTables();
         }
+
+        createTableInformationTable();
     }
 
     @Override
@@ -376,6 +379,16 @@ public class SqliteAdapter extends SqlCommonAdapter<SqliteConfig> {
                 + ", "
                 + FIELD_DATA_KEY
                 + ")"
+                + ");");
+    }
+
+    private void createTableInformationTable() {
+        var table = SqlUtils.mapTable(DataScope.TABLE_INFORMATION);
+        executeSql("CREATE TABLE IF NOT EXISTS "
+                + table
+                + "("
+                + FIELD_TABLE_VERSION
+                + " INT UNIQUE NOT NULL DEFAULT '0'"
                 + ");");
     }
 

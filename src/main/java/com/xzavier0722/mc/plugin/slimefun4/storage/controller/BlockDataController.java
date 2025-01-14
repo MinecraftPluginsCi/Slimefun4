@@ -1095,11 +1095,15 @@ public class BlockDataController extends ADataController {
         if (item == null) {
             scheduleDeleteTask(scopeKey, reqKey, true);
         } else {
-            var data = new RecordSet();
-            data.put(FieldKey.LOCATION, lKey);
-            data.put(FieldKey.INVENTORY_SLOT, slot + "");
-            data.put(FieldKey.INVENTORY_ITEM, item);
-            scheduleWriteTask(scopeKey, reqKey, data, true);
+            try {
+                var data = new RecordSet();
+                data.put(FieldKey.LOCATION, lKey);
+                data.put(FieldKey.INVENTORY_SLOT, slot + "");
+                data.put(FieldKey.INVENTORY_ITEM, item);
+                scheduleWriteTask(scopeKey, reqKey, data, true);
+            } catch (IllegalArgumentException e) {
+                Slimefun.logger().log(Level.WARNING, e.getMessage());
+            }
         }
     }
 
@@ -1132,11 +1136,15 @@ public class BlockDataController extends ADataController {
         if (item == null) {
             scheduleDeleteTask(scopeKey, reqKey, true);
         } else {
-            var data = new RecordSet();
-            data.put(FieldKey.UNIVERSAL_UUID, uuid.toString());
-            data.put(FieldKey.INVENTORY_SLOT, slot + "");
-            data.put(FieldKey.INVENTORY_ITEM, item);
-            scheduleWriteTask(scopeKey, reqKey, data, true);
+            try {
+                var data = new RecordSet();
+                data.put(FieldKey.UNIVERSAL_UUID, uuid.toString());
+                data.put(FieldKey.INVENTORY_SLOT, slot + "");
+                data.put(FieldKey.INVENTORY_ITEM, item);
+                scheduleWriteTask(scopeKey, reqKey, data, true);
+            } catch (IllegalArgumentException e) {
+                Slimefun.logger().log(Level.WARNING, e.getMessage());
+            }
         }
     }
 

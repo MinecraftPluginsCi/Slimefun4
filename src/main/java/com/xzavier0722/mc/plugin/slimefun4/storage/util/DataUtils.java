@@ -20,6 +20,10 @@ public class DataUtils {
     public static String itemStack2String(ItemStack itemStack) {
         Debug.log(TestCase.BACKPACK, "Serializing itemstack: " + itemStack);
 
+        if (itemStack == null) {
+            return "";
+        }
+
         var stream = new ByteArrayOutputStream();
         try (var bs = new BukkitObjectOutputStream(stream)) {
             bs.writeObject(itemStack);

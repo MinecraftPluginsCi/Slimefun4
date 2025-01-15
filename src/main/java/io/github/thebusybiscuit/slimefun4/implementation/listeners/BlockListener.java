@@ -113,15 +113,12 @@ public class BlockListener implements Listener {
         ItemStack item = e.getItemInHand();
         SlimefunItem sfItem = SlimefunItem.getByItem(item);
 
-        // TODO: Protection manager is null in testing environment.
-        if (!Slimefun.instance().isUnitTest()) {
-            Slimefun.getProtectionManager().logAction(e.getPlayer(), e.getBlock(), Interaction.PLACE_BLOCK);
-        }
-
         if (sfItem != null && !(sfItem instanceof NotPlaceable)) {
             // Fixes #994, should check placed block is equals to item material or not.
             if (item.getType() != e.getBlock().getType()) {
-                return;
+                if (item.getType() != e.getBlock().getBlockData().getPlacementMaterial()) {
+                    return;
+                }
             }
 
             if (!sfItem.canUse(e.getPlayer(), true)) {

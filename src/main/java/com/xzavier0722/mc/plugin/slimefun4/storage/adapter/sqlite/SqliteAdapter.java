@@ -19,6 +19,7 @@ import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlC
 import static com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlConstants.FIELD_UNIVERSAL_UUID;
 
 import city.norain.slimefun4.timings.entry.SQLEntry;
+import com.xzavier0722.mc.plugin.slimefun4.storage.adapter.IDataSourceAdapter;
 import com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlCommonAdapter;
 import com.xzavier0722.mc.plugin.slimefun4.storage.adapter.sqlcommon.SqlUtils;
 import com.xzavier0722.mc.plugin.slimefun4.storage.common.DataScope;
@@ -390,6 +391,12 @@ public class SqliteAdapter extends SqlCommonAdapter<SqliteConfig> {
                 + FIELD_TABLE_VERSION
                 + " INT UNIQUE NOT NULL DEFAULT '0'"
                 + ");");
+
+        if (Slimefun.isNewlyInstalled()) {
+            executeSql("INSERT INTO " + tableInformationTable + " (" + FIELD_TABLE_VERSION + ") SELECT '"
+                    + IDataSourceAdapter.DATABASE_VERSION + "' WHERE NOT EXISTS (SELECT 1 FROM " + tableInformationTable
+                    + ")");
+        }
     }
 
     public synchronized void executeSql(String sql) {

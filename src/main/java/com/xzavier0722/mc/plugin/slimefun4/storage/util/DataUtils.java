@@ -29,7 +29,8 @@ public class DataUtils {
             bs.writeObject(itemStack);
             var itemStr = Base64Coder.encodeLines(stream.toByteArray());
 
-            if (Slimefun.getDatabaseManager().getBlockDataStorageType() != StorageType.SQLITE
+            if (!Slimefun.getConfigManager().isBypassItemLengthCheck()
+                    && Slimefun.getDatabaseManager().getBlockDataStorageType() != StorageType.SQLITE
                     && itemStr.length() > 65535) {
                 throw new IllegalArgumentException("检测到过大物品, 请联系物品对应插件开发者解决: " + StringUtil.itemStackToString(itemStack)
                         + ", size = " + itemStr.length());

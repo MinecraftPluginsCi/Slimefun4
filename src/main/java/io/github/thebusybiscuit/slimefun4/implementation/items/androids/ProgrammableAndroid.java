@@ -205,6 +205,9 @@ public class ProgrammableAndroid extends SlimefunItem
                         rotatable.setRotation(p.getFacing());
                     }
                 }));
+
+                Slimefun.getBlockDataService().updateUniversalDataUUID(b, universalData.getKey());
+                PlayerHead.setSkin(b, PlayerSkin.fromBase64(texture), true);
             }
         };
     }

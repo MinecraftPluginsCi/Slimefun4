@@ -139,13 +139,9 @@ public class BlockListener implements Listener {
                     }
 
                     if (sfItem instanceof UniversalBlock) {
-                        var data = Slimefun.getDatabaseManager()
+                        Slimefun.getDatabaseManager()
                                 .getBlockDataController()
                                 .createUniversalBlock(block.getLocation(), sfItem.getId());
-
-                        if (Slimefun.getBlockDataService().isTileEntity(block.getType())) {
-                            Slimefun.getBlockDataService().updateUniversalDataUUID(block, data.getKey());
-                        }
                     } else {
                         Slimefun.getDatabaseManager()
                                 .getBlockDataController()

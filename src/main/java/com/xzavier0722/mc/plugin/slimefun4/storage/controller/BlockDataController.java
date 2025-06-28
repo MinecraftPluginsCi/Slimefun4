@@ -297,6 +297,10 @@ public class BlockDataController extends ADataController {
 
         Slimefun.getDatabaseManager().getBlockDataController().saveUniversalData(uniData);
 
+        if (Slimefun.getBlockDataService().isTileEntity(l.getBlock().getType())) {
+            Slimefun.getBlockDataService().updateUniversalDataUUID(l.getBlock(), uniData.getKey());
+        }
+
         return uniData;
     }
 
@@ -1090,7 +1094,7 @@ public class BlockDataController extends ADataController {
         var menu = universalData.getMenu();
         var universalID = universalData.getUUID();
 
-        var newInv = menu.getContents();
+        var newInv = universalData.getMenuContents();
         List<Pair<ItemStack, Integer>> lastSave;
         if (newInv == null) {
             lastSave = invSnapshots.remove(universalID.toString());
